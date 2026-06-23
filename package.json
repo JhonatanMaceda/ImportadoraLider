@@ -2,7 +2,7 @@
   "name": "importadoralider",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://JhonatanMaceda.github.io/ImportadoraLider",
+  "homepage": "https://jhonatanmaceda.github.io/ImportadoraLider",
   "type": "module",
   "scripts": {
     "dev": "vite",
