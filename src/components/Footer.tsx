@@ -93,7 +93,7 @@ export default function Footer() {
             >
 
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=100091311150538&mibextid=wwXIfr"
                 target="_blank"
                 rel="noreferrer"
                 className="
@@ -105,7 +105,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://tiktok.com"
+                href="https://www.tiktok.com/@importadoralider1?_r=1&_t=ZS-96fOpEKATNU"
                 target="_blank"
                 rel="noreferrer"
                 className="

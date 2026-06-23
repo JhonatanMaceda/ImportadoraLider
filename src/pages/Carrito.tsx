@@ -120,15 +120,15 @@ export default function Carrito() {
                 {cart.map(item => (
 
                   <div
-                    key={item.id}
                     className="
                     bg-white
                     rounded-2xl
                     shadow-md
                     p-5
                     flex
+                    flex-col
+                    md:flex-row
                     gap-5
-                    items-center
                     hover:shadow-xl
                     transition
                     "
@@ -138,8 +138,12 @@ export default function Carrito() {
                       src={item.imagen}
                       alt={item.nombre}
                       className="
-                      w-28
-                      h-28
+                      w-full
+                      max-w-[250px]
+                      h-auto
+                      mx-auto
+                      md:w-28
+                      md:h-28
                       object-cover
                       rounded-xl
                       border
@@ -192,79 +196,73 @@ export default function Carrito() {
                     <div
                       className="
                       flex
-                      flex-col
                       items-center
+                      justify-center
                       gap-3
+                      w-full
                       "
                     >
 
-                      <div
+                      <button
+                        onClick={() =>
+                          decreaseQuantity(item.id)
+                        }
                         className="
-                        flex
-                        items-center
-                        gap-3
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-gray-200
+                        hover:bg-gray-300
                         "
                       >
+                        -
+                      </button>
 
-                        <button
-                          onClick={() =>
-                            decreaseQuantity(item.id)
-                          }
-                          className="
-                          w-9
-                          h-9
-                          rounded-full
-                          bg-gray-200
-                          hover:bg-gray-300
-                          "
-                        >
-                          -
-                        </button>
-
-                        <span
-                          className="
-                          font-bold
-                          text-lg
-                          "
-                        >
-                          {item.cantidad}
-                        </span>
-
-                        <button
-                          onClick={() =>
-                            increaseQuantity(item.id)
-                          }
-                          className="
-                          w-9
-                          h-9
-                          rounded-full
-                          bg-[#32738C]
-                          text-white
-                          hover:opacity-90
-                          "
-                        >
-                          +
-                        </button>
-
-                      </div>
+                      <span
+                        className="
+                        font-bold
+                        text-lg
+                        min-w-[30px]
+                        text-center
+                        "
+                      >
+                        {item.cantidad}
+                      </span>
 
                       <button
                         onClick={() =>
-                          removeFromCart(item.id)
+                          increaseQuantity(item.id)
                         }
                         className="
-                        bg-red-500
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-[#32738C]
                         text-white
-                        px-4
-                        py-2
-                        rounded-lg
-                        hover:bg-red-600
                         "
                       >
-                        Eliminar
+                        +
                       </button>
 
                     </div>
+
+                    <button
+                      onClick={() =>
+                        removeFromCart(item.id)
+                      }
+                      className="
+                      w-full
+                      md:w-auto
+                      bg-red-500
+                      text-white
+                      px-4
+                      py-3
+                      rounded-xl
+                      hover:bg-red-600
+                      "
+                    >
+                      Eliminar
+                    </button>
 
                   </div>
 
