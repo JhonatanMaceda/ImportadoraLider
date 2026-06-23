@@ -129,10 +129,10 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
               flex
               gap-5
               text-3xl
-              `,children:[(0,Y.jsx)(`a`,{href:`https://facebook.com`,target:`_blank`,rel:`noreferrer`,className:`
+              `,children:[(0,Y.jsx)(`a`,{href:`https://www.facebook.com/profile.php?id=100091311150538&mibextid=wwXIfr`,target:`_blank`,rel:`noreferrer`,className:`
                 hover:text-[#F28A2E]
                 transition
-                `,children:(0,Y.jsx)(yr,{})}),(0,Y.jsx)(`a`,{href:`https://tiktok.com`,target:`_blank`,rel:`noreferrer`,className:`
+                `,children:(0,Y.jsx)(yr,{})}),(0,Y.jsx)(`a`,{href:`https://www.tiktok.com/@importadoralider1?_r=1&_t=ZS-96fOpEKATNU`,target:`_blank`,rel:`noreferrer`,className:`
                 hover:text-[#F28A2E]
                 transition
                 `,children:(0,Y.jsx)(vr,{})})]})]})]}),(0,Y.jsx)(`div`,{className:`
@@ -426,13 +426,18 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
                     shadow-md
                     p-5
                     flex
+                    flex-col
+                    md:flex-row
                     gap-5
-                    items-center
                     hover:shadow-xl
                     transition
                     `,children:[(0,Y.jsx)(`img`,{src:e.imagen,alt:e.nombre,className:`
-                      w-28
-                      h-28
+                      w-full
+                      max-w-[250px]
+                      h-auto
+                      mx-auto
+                      md:w-28
+                      md:h-28
                       object-cover
                       rounded-xl
                       border
@@ -451,37 +456,37 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
                         mt-2
                         `,children:[`Bs. `,e.precio]}),(0,Y.jsxs)(`p`,{className:`text-gray-500`,children:[`Subtotal:`,` `,`Bs.`,` `,(e.precio*e.cantidad).toFixed(2)]})]}),(0,Y.jsxs)(`div`,{className:`
                       flex
-                      flex-col
                       items-center
+                      justify-center
                       gap-3
-                      `,children:[(0,Y.jsxs)(`div`,{className:`
-                        flex
-                        items-center
-                        gap-3
-                        `,children:[(0,Y.jsx)(`button`,{onClick:()=>r(e.id),className:`
-                          w-9
-                          h-9
-                          rounded-full
-                          bg-gray-200
-                          hover:bg-gray-300
-                          `,children:`-`}),(0,Y.jsx)(`span`,{className:`
-                          font-bold
-                          text-lg
-                          `,children:e.cantidad}),(0,Y.jsx)(`button`,{onClick:()=>n(e.id),className:`
-                          w-9
-                          h-9
-                          rounded-full
-                          bg-[#32738C]
-                          text-white
-                          hover:opacity-90
-                          `,children:`+`})]}),(0,Y.jsx)(`button`,{onClick:()=>t(e.id),className:`
-                        bg-red-500
+                      w-full
+                      `,children:[(0,Y.jsx)(`button`,{onClick:()=>r(e.id),className:`
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-gray-200
+                        hover:bg-gray-300
+                        `,children:`-`}),(0,Y.jsx)(`span`,{className:`
+                        font-bold
+                        text-lg
+                        min-w-[30px]
+                        text-center
+                        `,children:e.cantidad}),(0,Y.jsx)(`button`,{onClick:()=>n(e.id),className:`
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-[#32738C]
                         text-white
-                        px-4
-                        py-2
-                        rounded-lg
-                        hover:bg-red-600
-                        `,children:`Eliminar`})]})]},e.id))}),(0,Y.jsx)(`div`,{children:(0,Y.jsxs)(`div`,{className:`
+                        `,children:`+`})]}),(0,Y.jsx)(`button`,{onClick:()=>t(e.id),className:`
+                      w-full
+                      md:w-auto
+                      bg-red-500
+                      text-white
+                      px-4
+                      py-3
+                      rounded-xl
+                      hover:bg-red-600
+                      `,children:`Eliminar`})]}))}),(0,Y.jsx)(`div`,{children:(0,Y.jsxs)(`div`,{className:`
                   bg-white
                   rounded-2xl
                   shadow-lg
