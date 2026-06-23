@@ -197,9 +197,8 @@ export default function Carrito() {
                       className="
                       flex
                       items-center
-                      justify-center
-                      gap-3
-                      w-full
+                      gap-4
+                      flex-wrap
                       "
                     >
 
@@ -239,32 +238,30 @@ export default function Carrito() {
                         rounded-full
                         bg-[#32738C]
                         text-white
+                        hover:opacity-90
                         "
                       >
                         +
                       </button>
+                        </div>
+                      <button
+                        onClick={() =>
+                          removeFromCart(item.id)
+                        }
+                        className="
+                        bg-red-500
+                        text-white
+                        px-4
+                        py-2
+                        rounded-xl
+                        hover:bg-red-600
+                        transition
+                        "
+                      >
+                        Eliminar
+                      </button>
 
                     </div>
-
-                    <button
-                      onClick={() =>
-                        removeFromCart(item.id)
-                      }
-                      className="
-                      w-full
-                      md:w-auto
-                      bg-red-500
-                      text-white
-                      px-4
-                      py-3
-                      rounded-xl
-                      hover:bg-red-600
-                      "
-                    >
-                      Eliminar
-                    </button>
-
-                  </div>
 
                 ))}
 
