@@ -24,6 +24,12 @@ export default function Checkout() {
   const [codigoPedido, setCodigoPedido] =
     useState('')
 
+  const [ubicacion, setUbicacion] =
+  useState('')
+
+  const [referencia, setReferencia] =
+  useState('')
+
   const [loading, setLoading] =
     useState(false)
 
@@ -31,7 +37,8 @@ export default function Checkout() {
 
     if (
       !cliente.trim() ||
-      !telefono.trim()
+      !telefono.trim() ||
+      !ubicacion.trim()
     ) {
       alert('Completa todos los campos')
       return
@@ -51,13 +58,15 @@ export default function Checkout() {
       await supabase
         .from('pedidos')
         .insert([
-          {
-            codigo,
-            cliente,
-            telefono,
-            total: totalPrice,
-            estado: 'Pendiente'
-          }
+        {
+          codigo,
+          cliente,
+          telefono,
+          ubicacion,
+          referencia,
+          total: totalPrice,
+          estado: 'Pendiente'
+        }
         ])
         .select()
         .single()
@@ -101,27 +110,55 @@ export default function Checkout() {
 
       ).join('\n')
 
-    const mensaje = `
-    Hola Importadora Lider.
+    const mensaje = `🛒 *NUEVO PEDIDO*
 
-    Deseo confirmar el siguiente pedido.
+    ━━━━━━━━━━━━━━━
 
-    Código: ${codigo}
+    📦 Código:
+    ${codigo}
 
-    Cliente: ${cliente}
+    👤 Cliente:
+    ${cliente}
 
-    Teléfono: ${telefono}
+    📞 Teléfono:
+    ${telefono}
 
-    ${detalleProductos}
+    📍 Dirección:
+    ${ubicacion}
 
-    TOTAL: Bs. ${totalPrice.toFixed(2)}
+    📝 Referencia:
+    ${referencia || "Sin referencia"}
 
-    Gracias.
+    ━━━━━━━━━━━━━━━
+
+    🛍 PRODUCTOS
+
+    ${cart
+      .map(item =>
+    `• ${item.nombre}
+
+    Cantidad: ${item.cantidad}
+
+    Precio: Bs. ${item.precio}
+
+    Subtotal:
+    Bs. ${(item.precio * item.cantidad).toFixed(2)}
+    `)
+      .join('\n')}
+
+    ━━━━━━━━━━━━━━━
+
+    💰 TOTAL
+
+    Bs. ${totalPrice.toFixed(2)}
+
+    Muchas gracias por su compra.
     `
 
     window.open(
-      `https://wa.me/59168481834?text=${encodeURIComponent(mensaje)}`,
-      '_blank'
+    `https://wa.me/59168481834
+    ?text=${encodeURIComponent(mensaje)}`,
+    '_blank'
     )
 
     clearCart()
@@ -281,6 +318,39 @@ export default function Checkout() {
                   border
                   p-4
                   rounded-xl
+                  "
+                />
+
+                <input
+                  type="text"
+                  placeholder="Dirección o ubicación"
+                  value={ubicacion}
+                  onChange={e =>
+                    setUbicacion(e.target.value)
+                  }
+                  className="
+                  w-full
+                  border
+                  p-3
+                  mb-4
+                  rounded-lg
+                  "
+                />
+
+                <textarea
+                  placeholder="Referencia (opcional)"
+                  value={referencia}
+                  onChange={e =>
+                    setReferencia(e.target.value)
+                  }
+                  rows={3}
+                  className="
+                  w-full
+                  border
+                  p-3
+                  mb-4
+                  rounded-lg
+                  resize-none
                   "
                 />
 
