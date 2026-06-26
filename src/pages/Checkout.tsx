@@ -133,18 +133,7 @@ export default function Checkout() {
 
     🛍 PRODUCTOS
 
-    ${cart
-      .map(item =>
-    `• ${item.nombre}
-
-    Cantidad: ${item.cantidad}
-
-    Precio: Bs. ${item.precio}
-
-    Subtotal:
-    Bs. ${(item.precio * item.cantidad).toFixed(2)}
-    `)
-      .join('\n')}
+    ${detalleProductos}
 
     ━━━━━━━━━━━━━━━
 
