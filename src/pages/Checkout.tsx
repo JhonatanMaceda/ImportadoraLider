@@ -21,26 +21,70 @@ export default function Checkout() {
   const [telefono, setTelefono] =
     useState('')
 
+  const [latitud, setLatitud] = useState<number | null>(null)
+
+  const [longitud, setLongitud] = useState<number | null>(null)
+
+  const [obteniendoUbicacion, setObteniendoUbicacion] =
+    useState(false)
+
   const [codigoPedido, setCodigoPedido] =
     useState('')
 
-  const [ubicacion, setUbicacion] =
-  useState('')
-
-  const [referencia, setReferencia] =
-  useState('')
-
   const [loading, setLoading] =
     useState(false)
+
+  async function obtenerUbicacion() {
+
+    if (!navigator.geolocation) {
+
+      alert("Tu navegador no soporta geolocalización")
+
+      return
+
+    }
+
+    setObteniendoUbicacion(true)
+
+    navigator.geolocation.getCurrentPosition(
+
+      posicion => {
+
+        setLatitud(posicion.coords.latitude)
+
+        setLongitud(posicion.coords.longitude)
+
+        setObteniendoUbicacion(false)
+
+      },
+
+      () => {
+
+        alert("No se pudo obtener tu ubicación")
+
+        setObteniendoUbicacion(false)
+
+      },
+
+      {
+
+        enableHighAccuracy: true
+
+      }
+
+    )
+
+  }
 
   async function finalizarPedido() {
 
     if (
       !cliente.trim() ||
       !telefono.trim() ||
-      !ubicacion.trim()
+      latitud === null ||
+      longitud === null
     ) {
-      alert('Completa todos los campos')
+      alert("Completa todos los campos y comparte tu ubicación.")
       return
     }
 
@@ -54,19 +98,27 @@ export default function Checkout() {
         .slice(0, 6)
         .toUpperCase()
 
+    const mapsUrl =
+      `https://www.google.com/maps?q=${latitud},${longitud}`
+
     const { data: pedidoData, error } =
       await supabase
         .from('pedidos')
         .insert([
-        {
-          codigo,
-          cliente,
-          telefono,
-          ubicacion,
-          referencia,
-          total: totalPrice,
-          estado: 'Pendiente'
-        }
+          {
+            codigo,
+            cliente,
+            telefono,
+
+            latitud,
+            longitud,
+
+            maps_url: mapsUrl,
+
+            total: totalPrice,
+
+            estado: 'Pendiente'
+          }
         ])
         .select()
         .single()
@@ -80,24 +132,30 @@ export default function Checkout() {
       return
     }
 
-    for (const item of cart) {
+    if (!pedidoData) {
 
-      await supabase
-        .from('detalle_pedido')
-        .insert([
-          {
-            pedido_id: pedidoData.id,
+      alert("No se pudo registrar el pedido.")
 
-            producto_id: item.id,
+      setLoading(false)
 
-            cantidad: item.cantidad,
+      return
 
-            subtotal:
-              item.cantidad *
-              item.precio
-          }
-        ])
     }
+
+    await Promise.all(
+      cart.map(item =>
+        supabase
+          .from('detalle_pedido')
+          .insert([
+            {
+              pedido_id: pedidoData.id,
+              producto_id: item.id,
+              cantidad: item.cantidad,
+              subtotal: item.cantidad * item.precio
+            }
+          ])
+      )
+    )
 
     const detalleProductos =
       cart.map(item =>
@@ -110,9 +168,12 @@ export default function Checkout() {
 
       ).join('\n')
 
-    const mensaje = `🛒 *NUEVO PEDIDO*
+    const numero = "59168481834"
 
-    ━━━━━━━━━━━━━━━
+    const mensaje = `
+    🛒 NUEVO PEDIDO
+
+    ━━━━━━━━━━━━━━
 
     📦 Código:
     ${codigo}
@@ -123,39 +184,36 @@ export default function Checkout() {
     📞 Teléfono:
     ${telefono}
 
-    📍 Dirección:
-    ${ubicacion}
+    📍 Ubicación:
+    ${mapsUrl}
 
-    📝 Referencia:
-    ${referencia || "Sin referencia"}
-
-    ━━━━━━━━━━━━━━━
+    ━━━━━━━━━━━━━━
 
     🛍 PRODUCTOS
 
     ${detalleProductos}
 
-    ━━━━━━━━━━━━━━━
+    ━━━━━━━━━━━━━━
 
     💰 TOTAL
 
     Bs. ${totalPrice.toFixed(2)}
 
-    Muchas gracias por su compra.
+    Gracias por su compra.
     `
 
-    window.open(
-    `https://wa.me/59168481834
-    ?text=${encodeURIComponent(mensaje)}`,
-    '_blank'
-    )
+    const url =
+    `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`
+
+    window.open(url, "_blank")
 
     clearCart()
 
     setCodigoPedido(codigo)
 
     setLoading(false)
-  }
+
+    }
 
   return (
     <div
@@ -310,38 +368,70 @@ export default function Checkout() {
                   "
                 />
 
-                <input
-                  type="text"
-                  placeholder="Dirección o ubicación"
-                  value={ubicacion}
-                  onChange={e =>
-                    setUbicacion(e.target.value)
-                  }
-                  className="
-                  w-full
-                  border
-                  p-3
-                  mb-4
-                  rounded-lg
-                  "
-                />
+                <div className="mb-6">
 
-                <textarea
-                  placeholder="Referencia (opcional)"
-                  value={referencia}
-                  onChange={e =>
-                    setReferencia(e.target.value)
-                  }
-                  rows={3}
-                  className="
-                  w-full
-                  border
-                  p-3
-                  mb-4
-                  rounded-lg
-                  resize-none
-                  "
-                />
+                  <button
+                    type="button"
+                    onClick={obtenerUbicacion}
+                    disabled={obteniendoUbicacion}
+                    className="
+                      w-full
+                      bg-blue-600
+                      hover:bg-blue-700
+                      text-white
+                      py-3
+                      rounded-xl
+                      font-semibold
+                      transition
+                    "
+                  >
+
+                    {obteniendoUbicacion
+                      ? "Obteniendo ubicación..."
+                      : "📍 Compartir mi ubicación"}
+                  </button>
+
+                  {latitud && longitud && (
+
+                    <div
+                      className="
+                        mt-4
+                        bg-green-50
+                        border
+                        border-green-300
+                        rounded-xl
+                        p-4
+                      "
+                    >
+
+                      <p className="text-green-700 font-semibold">
+                        ✅ Ubicación obtenida correctamente
+                      </p>
+
+                      <a
+                        href={`https://www.google.com/maps?q=${latitud},${longitud}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          inline-block
+                          mt-4
+                          bg-green-600
+                          hover:bg-green-700
+                          text-white
+                          px-5
+                          py-2
+                          rounded-lg
+                          font-semibold
+                        "
+                      >
+                        🗺 Ver ubicación en Google Maps
+                      </a>
+
+                    </div>
+
+                  )}
+
+                </div>
 
               </div>
 
